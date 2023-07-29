@@ -5,20 +5,19 @@ const bcrypt = require('bcrypt')
 
 // Homepage
 router.get('/', (req, res) => {
-
-    res.render('index', {
+    res.render('', {
         isHome: true,
         isLoggedIn: req.session.user_id
     });
 });
+
 // Login page
 router.get('/login', (req, res) => {
-    if (req.session.user_id) return res.redirect('/mood');
-
     res.render('login', {
         isLogin: true
     });
 });
+
 // Register Page
 router.get('/register', (req, res) => {
     res.render('register', {

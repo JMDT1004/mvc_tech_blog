@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tech Blog</title>
+    <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="/css/style.css">
 
 </head>
@@ -13,7 +14,7 @@
     <header class="header">Tech Blog
         <nav>
             <a href="/" class="{{#if isHome}}hidden{{/if}}">Home</a>
-            {{#if email}}
+            {{#if username}}
             <a href="/logout">Log Out</a>
             {{else}}
             {{#if isLoggedIn}}
@@ -21,10 +22,10 @@
             {{else}}
             <a href="/login" class="{{#if isLogin}}hidden{{/if}}">Login</a>
             {{/if}}
+            <a href="/Register" class="{{#if isLogin}}hidden{{/if}}">Register</a>
             {{/if}}
             <p class="{{#if isHome}}hidden{{/if}}{{#if isLogin}} hidden{{/if}}{{#if isRegister}} hidden{{/if}}">Welcome,
-                {{email}}</p>
-
+                {{username}}</p>
         </nav>
     </header>
     {{{body}}}
