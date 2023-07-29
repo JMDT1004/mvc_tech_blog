@@ -2,10 +2,10 @@ const { Model, DataTypes } = require('sequelize');
 const { hash, compare } = require('bcrypt');
 const db = require('../config/connection');
 
+
 class User extends Model { }
 
 User.init({
-    
     email: {
         type: DataTypes.STRING,
         unique: true,
@@ -14,7 +14,6 @@ User.init({
             isEmail: true
         }
     },
-
     username: {
         type: DataTypes.STRING,
         unique: true,
@@ -23,7 +22,6 @@ User.init({
             min: 5
         }
     },
-
     password: {
         type: DataTypes.STRING,
         validate: {

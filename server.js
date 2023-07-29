@@ -25,7 +25,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
 
-//coockies
+//cookies
 app.use(session({
   secret: process.env.SECRET_KEY,
   resave: false,
@@ -38,6 +38,14 @@ app.use(session({
 
 app.use([userRoutes, viewRoutes]);
 
+// error handling middleware
+app.use((err, res) => {
+  console.error(err.stack);
+  res.status(500).send('Internal Server Error');
+});
+
 sequelize.sync({ force: false }).then(() => {
   app.listen(PORT, () => console.log(`listening on PORT: ${PORT}`));
+}).catch((err) => {
+  console.error('Unable to connect to the database:', err);
 });

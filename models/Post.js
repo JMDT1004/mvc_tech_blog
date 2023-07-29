@@ -1,22 +1,30 @@
 const { Model, DataTypes } = require('sequelize');
 const db = require('../config/connection');
 
-class Dashboard extends Model { }
+class Post extends Model { }
 
-Dashboard.init({
+Post.init({
     title: {
         type: DataTypes.STRING,
         allowNull: false,
         validate: {
-            min: 5
+            len: [5]
         }
-    }, entry: {
+    },
+    content: {
         type: DataTypes.TEXT,
         allowNull: true,
+    },
+    userId: {
+        type: DataTypes.INTEGER,
+        references: {
+            model: 'users',
+            key: 'id',
+        },
     }
 }, {
     sequelize: db,
-    modelName: 'dashboard'
+    modelName: 'post'
 });
 
-module.exports = Dashboard;
+module.exports = Post;

@@ -1,14 +1,24 @@
 const router = require('express').Router();
-const User = require('../models/User');
-const Dashboard = require('../models/Dashboard');
-const bcrypt = require('bcrypt')
+const { User, Post, Dashboard } = require('../models');
 
 // Homepage
-router.get('/', (req, res) => {
-    res.render('', {
-        isHome: true,
-        isLoggedIn: req.session.user_id
-    });
+router.get('/', async (req, res) => {
+    try {
+        const postData = await Post.findAll({
+            include: [User],
+            order: [['createdAt', 'DESC']],
+        });
+        const posts = postData.map((post) => post.get({ plain: true }));
+
+        res.render('homepage', {
+            isHome: true,
+            isLoggedIn: !!req.session.user_id,
+            posts,
+        });
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Internal Server Error');
+    }
 });
 
 // Login page
@@ -26,10 +36,30 @@ router.get('/register', (req, res) => {
 });
 
 // Dashboard Page
-router.get('/dashboard', (req, res) => {
+router.get('/dashboard', async (req, res) => {
     if (!req.session.user_id) return res.redirect('/login');
 
-    res.render('dashboard');
+    try {
+        const dashboardData = await Dashboard.findAll({
+            where: {
+                userId: req.session.user_id
+            },
+            include: [{
+                model: Post,
+                include: [User]
+            }]
+        });
+
+        const dashboards = dashboardData.map((dashboard) => dashboard.get({ plain: true }));
+
+        res.render('dashboard', {
+            dashboards,
+        });
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Internal Server Error');
+    }
 });
+
 
 module.exports = router;
