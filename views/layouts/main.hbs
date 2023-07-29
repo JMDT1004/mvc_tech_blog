@@ -13,18 +13,18 @@
 <body>
     <header class="header">Tech Blog
         <nav>
-            <a href="/" class="{{#if isHome}}hidden{{/if}}">Home</a>
+            <a href="/" class="{{#if isHome}}{{/if}}">Home</a>
             {{#if username}}
             <a href="/logout">Log Out</a>
             {{else}}
             {{#if isLoggedIn}}
-            <a href="/dash">Dashboard</a>
+            <a href="/dash" class="{{#if isHome}}hidden{{/if}}">Dashboard</a>
             {{else}}
-            <a href="/login" class="{{#if isLogin}}hidden{{/if}}">Login</a>
+            <a href="/login" class="{{#if isLogin}}{{/if}}">Login</a>
             {{/if}}
-            <a href="/Register" class="{{#if isLogin}}hidden{{/if}}">Register</a>
+            <a href="/Register" class="{{#if isLogin}}{{/if}}">Register</a>
             {{/if}}
-            <p class="{{#if isHome}}hidden{{/if}}{{#if isLogin}} hidden{{/if}}{{#if isRegister}} hidden{{/if}}">Welcome,
+            <p class="{{#if isHome}}{{/if}}{{#if isLogin}} {{/if}}{{#if isRegister}} {{/if}}">Welcome,
                 {{username}}</p>
         </nav>
     </header>

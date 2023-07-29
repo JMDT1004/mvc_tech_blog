@@ -21,6 +21,14 @@ Post.init({
             model: 'users',
             key: 'id',
         },
+    },
+    // Add this field to associate Post with Dashboard
+    dashboardId: {
+        type: DataTypes.INTEGER,
+        references: {
+            model: 'dashboards',  // Ensure that 'dashboards' is the correct name of the table in your DB
+            key: 'id',
+        },
     }
 }, {
     sequelize: db,

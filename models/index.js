@@ -16,8 +16,17 @@ Post.belongsTo(User, {
   foreignKey: 'userId',
 });
 
+Post.belongsTo(Dashboard, {
+  foreignKey: 'dashboardId',
+});
+
 Dashboard.belongsTo(User, {
   foreignKey: 'userId',
+});
+
+Dashboard.hasMany(Post, {
+  foreignKey: 'dashboardId',
+  onDelete: 'CASCADE',
 });
 
 module.exports = { User, Post, Dashboard };

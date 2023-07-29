@@ -4,11 +4,20 @@ const { User, Post, Dashboard } = require('../models');
 // Homepage
 router.get('/', async (req, res) => {
     try {
-        const postData = await Post.findAll({
-            include: [User],
-            order: [['createdAt', 'DESC']],
+        const dashboardData = await Dashboard.findAll({
+            include: [{
+                model: Post,
+                include: [User],
+                order: [['createdAt', 'DESC']],
+            }],
         });
-        const posts = postData.map((post) => post.get({ plain: true }));
+
+        // Extract posts from all dashboards
+        let posts = [];
+        dashboardData.forEach(dashboard => {
+            const dashboardPosts = dashboard.get({ plain: true }).posts;
+            posts = [...posts, ...dashboardPosts];
+        });
 
         res.render('homepage', {
             isHome: true,
@@ -40,20 +49,22 @@ router.get('/dashboard', async (req, res) => {
     if (!req.session.user_id) return res.redirect('/login');
 
     try {
-        const dashboardData = await Dashboard.findAll({
+        const dashboardData = await Dashboard.findOne({
             where: {
                 userId: req.session.user_id
             },
             include: [{
                 model: Post,
-                include: [User]
-            }]
+                include: [User],
+                order: [['createdAt', 'DESC']],
+            }],
         });
 
-        const dashboards = dashboardData.map((dashboard) => dashboard.get({ plain: true }));
+        const dashboard = dashboardData.get({ plain: true });
 
         res.render('dashboard', {
-            dashboards,
+            dashboard,
+            isLoggedIn: !!req.session.user_id,
         });
     } catch (err) {
         console.error(err);
